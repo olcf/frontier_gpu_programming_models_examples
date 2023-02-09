@@ -4,12 +4,13 @@
 mkdir -p cmake_build_dir && cd cmake_build_dir 
 rm -rf ./*
 
-PROGRAMMING_ENVIRONMENT="amd" # can be: cray | amd .
+if [[ -z "$PROGRAMMING_ENVIRONMENT" ]]; then
+PROGRAMMING_ENVIRONMENT="cray" # can be: cray | amd . 
+fi
 export CRAY_CPU_TARGET=x86-64
 
 module purge
 module load DefApps
-module load cmake/3.23.2
 
 
 if [[ ${PROGRAMMING_ENVIRONMENT} == "cray" ]]; then
@@ -25,6 +26,7 @@ module load rocm/5.1.0
 echo "building with amd"
 fi
 
+module load cmake/3.23.2
 cmake ..
 
 VERBOSE=1 make

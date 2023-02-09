@@ -3,3 +3,4 @@ make_build_dir
 *log
 Kokkos/kokkos-3.6.00/build
 Kokkos/kokkos-3.6.00/install
+*run

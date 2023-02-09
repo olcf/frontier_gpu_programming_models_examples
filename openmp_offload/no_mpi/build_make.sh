@@ -4,7 +4,10 @@
 
 # Options you can adjust
 
+if [[ -z "$PROGRAMMING_ENVIRONMENT" ]]; then
 PROGRAMMING_ENVIRONMENT="hipcc" # can be: cray | amd . 
+fi
+
 export CRAY_CPU_TARGET=x86-64
 
 
