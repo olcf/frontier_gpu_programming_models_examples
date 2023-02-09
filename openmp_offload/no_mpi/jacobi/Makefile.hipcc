@@ -1,0 +1,13 @@
+COMP    = hipcc 
+FLAGS   = -fopenmp --target=x86_64-pc-linux-gnu -fopenmp-targets=amdgcn-amd-amdhsa -Xopenmp-target=amdgcn-amd-amdhsa -march=gfx90a
+
+jacobi: jacobi.o
+	${COMP} ${FLAGS} jacobi.o -o jacobi
+
+jacobi.o: jacobi.c
+	${COMP} ${FLAGS} -c jacobi.c
+
+.PHONY: clean
+
+clean:
+	rm -f jacobi *.o
