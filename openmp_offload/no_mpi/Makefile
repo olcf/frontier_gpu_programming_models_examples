@@ -1,5 +1,5 @@
 COMP    = cc
-FLAGS   = -fopenmp
+FLAGS   = -fopenmp -craype-verbose
 
 jacobi: jacobi.o
 	${COMP} ${FLAGS} jacobi.o -o jacobi

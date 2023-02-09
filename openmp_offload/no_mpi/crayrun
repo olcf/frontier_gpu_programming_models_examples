@@ -1,0 +1,36 @@
+Using number of cells = 4096
+Using maximum iteration count = 100
+================ Serial Kernel ================================== 
+Serial Residual = 0.109140047
+CPU serial kernel time = 18.123183 Seconds
+================================================================= 
+
+=============== CPU OpenMP Kernel =============================== 
+Residual = 0.109140047
+Validation maximum error = 0.000000 : PASSED.
+OpenMP CPU time = 22.277409 Sec
+Number of OpenMP threads = 1
+Speedup = 0.813523
+================================================================= 
+
+=============== GPU Teams Kernel =============================== 
+Residual = 0.109140047
+Validation maximum error = 0.000000 : PASSED.
+OpenMP GPU Teams time = 11.242474 Sec
+Speedup = 1.612028
+================================================================= 
+
+=============== GPU Teams Distribute Parallel =================== 
+Residual = 0.109140047
+Validation maximum error = 0.000000 : PASSED.
+OpenMP GPU Teams Distribute Parallel time  = 12.250401 Sec
+Speedup = 1.479395
+================================================================= 
+
+=============== GPU Teams Distribute Parallel Data =============== 
+Residual = 0.109140047
+Validation maximum error = 0.000000 : PASSED.
+OpenMP GPU Teams Distribute Parallel data time  = 3.435292 Sec
+Speedup = 5.275587
+================================================================= 
+

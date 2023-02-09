@@ -19,6 +19,9 @@ See the `Makefile` for an example of how to set up a Makefile for an in-tree bui
 Compile by running `./build_make.sh`. Open `build_make.sh` and edit the variables at the
 top for your desired compilation options.
 
+## To run
+Run the compiled executable with `srun -N1 -n1 -G1 ./kokkos_example`.
+
 ## More information
 There is more information about Kokkos compilation in the below links
 

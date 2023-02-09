@@ -4,8 +4,8 @@
 
 # Options you can adjust
 
-CXX_COMPILER="gnu" # can be: hipcc | cc | gnu . cc uses Makefile. hipcc uses Makefile.hipcc.
-                  # gnu uses Makefile.gnu .
+PROGRAMMING_ENVIRONMENT="hipcc" # can be: cray | amd . 
+export CRAY_CPU_TARGET=x86-64
 
 
 mkdir -p make_build_dir && cd make_build_dir
@@ -14,27 +14,30 @@ rm -rf ./*
 cp ../Makefile* ../jacobi.c .
 
 
-echo ${CXX_COMPILER}
+echo ${PROGRAMMING_ENVIRONMENT}
+module purge
+module load DefApps
 
-if [[ ${CXX_COMPILER} == "cc" ]]; then
+if [[ ${PROGRAMMING_ENVIRONMENT} == "cray" ]]; then
 module load PrgEnv-cray
 module load craype-accel-amd-gfx90a
 module load rocm/5.1.0
-echo "building with CC"
-make 
-elif [[ ${CXX_COMPILER} == "hipcc" ]]; then
+echo "building with cray"
+make -f Makefile
+
+elif [[ ${PROGRAMMING_ENVIRONMENT} == "amd" ]]; then
+module load PrgEnv-amd
+module load craype-accel-amd-gfx90a
+module load rocm/5.1.0
+echo "building with amd"
+make -f Makefile
+
+elif [[ ${PROGRAMMING_ENVIRONMENT} == "hipcc" ]]; then
 module load PrgEnv-cray
 module load craype-accel-amd-gfx90a
 module load rocm/5.1.0
 echo "building with hipcc"
 make -f Makefile.hipcc
-elif [[ ${CXX_COMPILER} == "gnu" ]]; then
-module load PrgEnv-gnu
-module load gcc/12.2.0
-module load craype-accel-amd-gfx90a
-module load rocm/5.1.0
-echo "building with gnu"
-make -f Makefile.gnu
 fi
 
 echo
