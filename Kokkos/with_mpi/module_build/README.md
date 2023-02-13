@@ -4,15 +4,12 @@ The Frontier's Kokkos module (obtained with `module load kokkos`) was  built
 with `hipcc`. You can check all the options that Kokkos was built with (and thus
 supports for your application build) by executing `module show kokkos`. 
 
-
 ## Building with CMake
 See the `CMakeLists.txt` for an example of how to set up for a system module based build.
 Compile by running `./build_cmake.sh`. Open `build_cmake.sh` to see the build command. 
 
-
 ## To run
 See the `submit.sbatch` script.
-
 
 ## Note
 Instead of using the precompiled module from Frontier, you can also use a precompiled
@@ -28,6 +25,7 @@ module load cmake/3.23.2
 
 export MY_INSTALL_FOLDER=/path/to/install/location
 
+# show build with hipcc
 cmake .. -DCMAKE_CXX_COMPILER=hipcc \
  -DCMAKE_INSTALL_PREFIX=${MY_INSTALL_FOLDER}} \
  -DKokkos_ARCH_VEGA90A=ON \

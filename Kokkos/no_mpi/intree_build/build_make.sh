@@ -19,7 +19,7 @@ rm -rf ./*
 cp ../Makefile ../kokkos_example.cpp .
 
 module load ${PRGENV}
-module load rocm
+module load rocm/5.1.0
 make KOKKOS_DEVICES=${DEVICES} CXX=${CXX_COMPILER} KOKKOS_ARCH=${ARCH}
 
 echo

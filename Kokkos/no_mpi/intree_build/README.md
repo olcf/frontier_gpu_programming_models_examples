@@ -14,13 +14,16 @@ See the `CMakeLists.txt` for an example of how to set up for an in-tree build. C
 by running `./build_cmake.sh`. Open `build_cmake.sh` and edit the variables at the top
 for your desired compilation options.
 
+You can use `PrgEnv-cray`, `PrgEnv-amd`, `PrgEnv-gnu` interchangeably in the 
+`./build_cmake.sh` file.
+
 ## Building with Make
 See the `Makefile` for an example of how to set up a Makefile for an in-tree build.
 Compile by running `./build_make.sh`. Open `build_make.sh` and edit the variables at the
 top for your desired compilation options.
 
 ## To run
-Run the compiled executable with `srun -N1 -n1 -G1 ./kokkos_example`.
+See the `submit.sbatch` script.
 
 ## More information
 There is more information about Kokkos compilation in the below links

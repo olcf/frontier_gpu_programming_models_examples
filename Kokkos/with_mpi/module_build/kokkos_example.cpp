@@ -1,6 +1,4 @@
 /*
-//@HEADER
-// ************************************************************************
 //
 //                        Kokkos v. 2.0
 //              Copyright (2014) Sandia Corporation
@@ -48,6 +46,7 @@
 #include <cstdlib>
 #include <cstring>
 #include <sys/time.h>
+#include <mpi.h>
 
 #include <Kokkos_Core.hpp>
 
@@ -55,6 +54,24 @@ void checkSizes( int &N, int &M, int &S, int &nrepeat );
 
 int main( int argc, char* argv[] )
 {
+ 
+  MPI_Init(&argc, &argv);
+  int size;
+  MPI_Comm_size(MPI_COMM_WORLD, &size);
+
+  int rank;
+  MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+
+  char name[MPI_MAX_PROCESSOR_NAME];
+  int resultlength;
+  MPI_Get_processor_name(name, &resultlength);
+  
+
+  // Start Total Runtime Timer
+  double start_time, end_time, elapsed_time;
+  start_time = MPI_Wtime();
+
+
   int N = -1;         // number of rows 2^12
   int M = -1;         // number of columns 2^10
   int S = -1;         // total size 2^22
@@ -91,6 +108,7 @@ int main( int argc, char* argv[] )
   // Check sizes.
   checkSizes( N, M, S, nrepeat );
 
+  
   Kokkos::initialize( argc, argv );
   {
 
@@ -130,12 +148,13 @@ int main( int argc, char* argv[] )
 
   // Timer products.
   Kokkos::Timer timer;
+  double rank_result = 0;
 
   for ( int repeat = 0; repeat < nrepeat; repeat++ ) {
     // Application: <y,Ax> = y^T*A*x
     double result = 0;
 
-    Kokkos::parallel_reduce( N, KOKKOS_LAMBDA ( int j, double &update ) {
+    Kokkos::parallel_reduce("result calculation", N, KOKKOS_LAMBDA ( int j, double &update ) {
       double temp2 = 0;
 
       for ( int i = 0; i < M; ++i ) {
@@ -147,13 +166,14 @@ int main( int argc, char* argv[] )
 
     // Output result.
     if ( repeat == ( nrepeat - 1 ) ) {
-      printf( "  Computed result for %d x %d is %lf\n", N, M, result );
+      printf( "In rank %d: Computed result for %d x %d is %lf\n", rank, N, M, result );
+      rank_result = result;
     }
 
     const double solution = (double) N * (double) M;
 
     if ( result != solution ) {
-      printf( "  Error: result( %lf ) != solution( %lf )\n", result, solution );
+      printf( "In rank %d:  Error: result( %lf ) != solution( %lf )\n", rank, result, solution );
     }
   }
 
@@ -166,13 +186,37 @@ int main( int argc, char* argv[] )
   // The y vector (of length N) is read once.
   // double Gbytes = 1.0e-9 * double( sizeof(double) * ( 2 * M * N + N ) );
   double Gbytes = 1.0e-9 * double( sizeof(double) * ( M + M * N + N ) );
+  
+  end_time = MPI_Wtime();
+  elapsed_time = end_time - start_time;
+
+  double mpi_time_max;
+  MPI_Reduce(&elapsed_time, &mpi_time_max, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
+
+  double kokkos_time_max;
+  MPI_Reduce(&time, &kokkos_time_max, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
+
+  double total_sum;
+  MPI_Reduce(&rank_result, &total_sum, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+
+
 
   // Print results (problem size, time and bandwidth in GB/s).
-  printf( "  N( %d ) M( %d ) nrepeat ( %d ) problem( %g MB ) time( %g s ) bandwidth( %g GB/s )\n",
-          N, M, nrepeat, Gbytes * 1000, time, Gbytes * nrepeat / time );
+  printf( "In rank %d:  N( %d ) M( %d ) nrepeat ( %d ) problem( %g MB ) Kokkos time( %g s ) MPI time ( %g s) bandwidth( %g GB/s )\n",
+          rank, N, M, nrepeat, Gbytes * 1000, time, elapsed_time, Gbytes * nrepeat / time );
+
+
+  // MPI rank 0 will output the maximum total runtime and maximum time spent computing on GPUs
+  if(rank == 0){
+    printf("Final stats: Max MPI Time: %f Max Kokkos Time: %f, Total Sum: %f \n", mpi_time_max, kokkos_time_max, total_sum);
+  }
+
 
   }
   Kokkos::finalize();
+
+  
+  MPI_Finalize();
 
   return 0;
 }
