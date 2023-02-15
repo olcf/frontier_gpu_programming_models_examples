@@ -1,11 +1,15 @@
 This Jacobi example is pulled from
-[here](https://github.com/olcf/openmp-offload/tree/master/C/6-openmp-combined). 
+[here](https://github.com/olcf/openmp-offload/tree/master/C/4-openmp-gpu-data)
+with the modification that multiple ranks each redundantly perform the same set
+of tasks (a cpu kernel and an offloaded kernel), and the max time among all the
+ranks for each task is obtained with `MPI_Reduce`.
 
 # To Build
 For make, run `C_COMPILER=<value> ./build_make.sh` where `<value>` is either
-`cc` or `hipcc`. Look at the `build_make.sh`, `Makefile`, and `Makefile.hipcc` files to
-understand what's going on. Within the `build_make.sh`, we are setting the `PrgEnv-cray`
-for both `cc` and for `hipcc`. 
+`cc` or `hipcc`. Look at the `build_make.sh`, `Makefile`, and `Makefile.hipcc`
+files to understand what's going on and how the flags are set. Within the
+`build_make.sh`, we are setting the `PrgEnv-cray` for both `cc` and for
+`hipcc`. 
 
 For cmake, run `C_COMPILER=<value> ./build_cmake.sh` where `<value>` is either
 `cc` or `hipcc`. Look at the `build_cmake.sh`, and `CMakeLists.txt` files to
@@ -39,13 +43,15 @@ module load rocm
 See also the [OpenMP Offload compiler flag documentation for
 Frontier](https://docs.olcf.ornl.gov/systems/frontier_user_guide.html#openmp-gpu-offload).
 
-And also see the OpenMP Offload tutorial series for more info about OpenMP Offload itself
+And also see the OpenMP Offload tutorial video series for more info about OpenMP Offload itself
 (and also for Fortran examples):
 
 - https://github.com/olcf/openmp-offload
 - https://www.olcf.ornl.gov/calendar/introduction-to-openmp-offload-part-1/
 - https://www.olcf.ornl.gov/calendar/introduction-to-openmp-offload-part-2/
 - https://www.olcf.ornl.gov/calendar/preparing-for-frontier-openmp-part3/
+
+Text tutorial if you don't want video: https://enccs.github.io/openmp-gpu/
 
 # Notes
 - GCC currently doesn't support offloading for MI250X accelerators yet. Only Cray

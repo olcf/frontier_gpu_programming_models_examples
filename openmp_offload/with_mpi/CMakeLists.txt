@@ -11,3 +11,18 @@ if(OpenMP_C_FOUND)
       set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fopenmp -target x86_64-pc-linux-gnu -fopenmp-targets=amdgcn-amd-amdhsa -Xopenmp-target=amdgcn-amd-amdhsa -march=gfx90a")
     endif()
 endif()
+
+# We have to do explicit steps for hipcc that we wouldn't for cc, because the cc
+# compiler wrapper automatically adds the necessary MPI flags.
+if("${CMAKE_C_COMPILER}" MATCHES "bin/hipcc")
+ find_package(MPI)
+ if(MPI_C_FOUND)
+  message("MPI C Flags: ${MPI_C_LIBRARIES} ${MPI_C_INCLUDE_DIRS} ${MPI_C_LINK_FLAGS}")
+  target_link_libraries(kokkos_example MPI::MPI_C)
+ else()
+  message("MPI_C_FOUND is false, so need to set MPI flags manually")
+  set(MPICH_DIR "$ENV{MPICH_DIR}")
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -I${MPICH_DIR}/include")
+  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -L${MPICH_DIR}/lib -lmpi")
+ endif()
+endif()	

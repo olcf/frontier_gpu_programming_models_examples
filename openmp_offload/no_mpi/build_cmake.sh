@@ -1,34 +1,42 @@
 #!/bin/bash
 
 
+# Options you can adjust
+
+if [[ -z "$C_COMPILER" ]]; then
+C_COMPILER="hipcc" # can be: cc | hipcc . 
+fi
+
+echo "C_COMPILER: $C_COMPILER"
+
+export CRAY_CPU_TARGET=x86-64
+
 mkdir -p cmake_build_dir && cd cmake_build_dir 
 rm -rf ./*
 
-if [[ -z "$PROGRAMMING_ENVIRONMENT" ]]; then
-PROGRAMMING_ENVIRONMENT="cray" # can be: cray | amd . 
-fi
-export CRAY_CPU_TARGET=x86-64
 
 module purge
 module load DefApps
 
-
-if [[ ${PROGRAMMING_ENVIRONMENT} == "cray" ]]; then
+if [[ ${C_COMPILER} == "cc" ]]; then
 module load PrgEnv-cray
 module load craype-accel-amd-gfx90a
-module load rocm/5.1.0
-echo "building with cray"
+module load rocm
 
-elif [[ ${PROGRAMMING_ENVIRONMENT} == "amd" ]]; then
-module load PrgEnv-amd
-module load craype-accel-amd-gfx90a
-module load rocm/5.1.0
-echo "building with amd"
+
+elif [[ ${C_COMPILER} == "hipcc" ]]; then
+module load PrgEnv-cray
+module load rocm
 fi
 
+
 module load cmake/3.23.2
-cmake ..
+cmake -DCMAKE_C_COMPILER=${C_COMPILER} ..
 
 VERBOSE=1 make
 
-echo "executable 'jacobi' built in cmake_build_dir"
+echo
+echo
+if [[ -f "$(pwd)/jacobi" ]]; then
+echo "Executable 'jacobi' is in the make_build_dir directory"
+fi

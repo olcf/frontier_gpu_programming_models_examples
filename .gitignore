@@ -4,3 +4,7 @@ make_build_dir
 Kokkos/kokkos-3.6.00/build
 Kokkos/kokkos-3.6.00/install
 *run
+slurm-*.out
+*run
+results.csv
+core

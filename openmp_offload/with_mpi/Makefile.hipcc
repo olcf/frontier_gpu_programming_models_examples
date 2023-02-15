@@ -1,8 +1,9 @@
 COMP    = hipcc 
 FLAGS   = -v -fopenmp -target x86_64-pc-linux-gnu -fopenmp-targets=amdgcn-amd-amdhsa -Xopenmp-target=amdgcn-amd-amdhsa -march=gfx90a
+MPIFLAGS = -I${MPICH_DIR}/include -L${MPICH_DIR}/lib -lmpi
 
 jacobi: jacobi.c
-	${COMP} ${FLAGS} jacobi.c -o jacobi
+	${COMP} ${FLAGS} ${MPIFLAGS} jacobi.c -o jacobi
 
 #jacobi.o: jacobi.c
 #	${COMP} ${FLAGS} -c jacobi.c

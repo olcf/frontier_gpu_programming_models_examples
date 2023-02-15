@@ -1,9 +1,9 @@
-#include <math.h>
 #include <omp.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <math.h>
 
 unsigned int n_cells;
 unsigned int SIZE;
@@ -243,6 +243,22 @@ void validate(double *T, double *T_results) {
 }
 
 int main(int argc, char *argv[]) {
+// Using hipcc to compile doesn't automatically compile for GPU if you don't
+// set the flags `-fopenmp -target x86_64-pc-linux-gnu
+// -fopenmp-targets=amdgcn-amd-amdhsa -Xopenmp-target=amdgcn-amd-amdhsa
+// -march=gfx90a`
+// The below will test to see if omp target directive is actually running on 
+// the GPU or not.
+  #pragma omp target 
+  {
+      if (omp_is_initial_device()) {
+        printf("Running on host\n");    
+      } else {
+        int nteams= omp_get_num_teams(); 
+        int nthreads= omp_get_num_threads();
+        printf("Running on device with %d teams in total and %d threads in each team\n",nteams,nthreads);
+      }
+  }
 
   unsigned int max_iterations; // maximal number of iterations
 

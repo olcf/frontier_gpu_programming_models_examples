@@ -4,6 +4,9 @@ of the same vector addition code written for different paradigms (HIP, OpenMP, M
 
 The hipblas example in the `hipblas_example` directory is adapted from [here](https://github.com/olcf/HIP_for_CUDA_programmers/tree/master/exercises/gpu_xgemm_test/solution).
 
+In each example, each rank is redundantly performing the same task on GPU and
+then `MPI_Reduce` is used to return the max time for GPU and/or MPI.
+
 ## To build
 You can build HIP code with either the CC compiler wrapper or with hipcc. 
 

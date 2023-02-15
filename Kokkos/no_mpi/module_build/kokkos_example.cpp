@@ -151,7 +151,6 @@ int main( int argc, char* argv[] )
   Kokkos::deep_copy(x, h_x);
   Kokkos::deep_copy(A, h_A);
 
-  std::cout << "here after deep copy" << std::endl;
   // Timer products.
   Kokkos::Timer timer;
 
