@@ -1,4 +1,4 @@
-cmake_minimum_required (VERSION 3.10)
+cmake_minimum_required (VERSION 3.23)
 project (kokkos_intree_cmake_example)
 
 
