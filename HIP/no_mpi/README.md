@@ -10,14 +10,14 @@ You can build HIP code with either the CC compiler wrapper or with hipcc.
 For make, run `CXX_COMPILER=<value> ./build_make.sh` where `<value>` is either
 `CC` or `hipcc`. Look at the `build_make.sh`, `Makefile`, and `Makefile.hipcc` files to
 understand what's going on. Within the `build_make.sh`, we are setting the `PrgEnv-cray`
-for both `CC` and for `hipcc`, but the other PrgEnvs are also valid if you need to use 
-those.
-
+for both `CC` and for `hipcc`, you can also use `PrgEnv-amd` for `CC` but not `PrgEnv-gnu`.
+You can use `PrgEnv-amd` and `PrgEnv-gnu` for hipcc.
+ 
 For cmake, run `CXX_COMPILER=<value> ./build_make.sh` where `<value>` is either
 `CC` or `hipcc`. Look at the `build_cmake.sh`, and `CMakeLists.txt` files to
 understand what's going on. Within the `build_cmake.sh`, we are setting the `PrgEnv-cray`
-for both `CC` and for `hipcc`, but the other PrgEnvs are also valid if you need to use 
-those.
+for both `CC` and for `hipcc`, you can also use `PrgEnv-amd` for `CC` but not `PrgEnv-gnu`.
+You can use `PrgEnv-amd` and `PrgEnv-gnu` for hipcc.
 
 ## Notes on CMake for HIP
 
@@ -50,7 +50,7 @@ module load rocm
 If you're using hipcc, you only need
 
 ```
-module load PrgEnv-Cray
+module load PrgEnv-Cray # or amd or gnu
 module load rocm
 ```
 

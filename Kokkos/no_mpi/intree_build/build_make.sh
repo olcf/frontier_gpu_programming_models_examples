@@ -5,8 +5,8 @@
 # Options you can adjust
 
 PRGENV="PrgEnv-cray" # can be: PrgEnv-cray | PrgEnv-gnu | PrgEnv-amd
-CXX_COMPILER="CC" # can be: hipcc | CC . hipcc for GPU backend. CC for CPU backend only.
-DEVICES="OpenMP,Serial" # can be: HIP,Serial | OpenMP,Serial . HIP,Serial for GPU backend. OpenMP,Serial for CPU backend.
+CXX_COMPILER="hipcc" # can be: hipcc | CC . hipcc for GPU backend. CC for CPU backend only.
+DEVICES="HIP,Serial" # can be: HIP,Serial | OpenMP,Serial . HIP,Serial for GPU backend. OpenMP,Serial for CPU backend.
 ARCH="ZEN3,VEGA90A"        
 
 

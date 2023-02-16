@@ -29,7 +29,7 @@ make -f Makefile
 
 
 elif [[ ${CXX_COMPILER} == "hipcc" ]]; then
-module load PrgEnv-cray
+module load PrgEnv-gnu
 module load rocm
 make -f Makefile.hipcc
 fi

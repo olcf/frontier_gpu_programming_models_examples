@@ -15,14 +15,15 @@ by running `./build_cmake.sh`. Open `build_cmake.sh` and edit the variables at t
 for your desired compilation options.
 
 You can use `PrgEnv-cray`, `PrgEnv-amd`, `PrgEnv-gnu` interchangeably in the 
-`./build_cmake.sh` file.
+`./build_cmake.sh` file for `hipcc`.
 
 ## Building with Make
 See the `Makefile` for an example of how to set up a Makefile for an in-tree build.
 Compile by running `./build_make.sh`. Open `build_make.sh` and edit the variables at the
 top for your desired compilation options.
 
-You can use PrgEnv-cray, PrgEnv-amd, PrgEnv-gnu interchangeably in the ./build_cmake.sh file.
+You can use `PrgEnv-cray`, `PrgEnv-amd`, `PrgEnv-gnu` interchangeably in the 
+`./build_make.sh` file for `hipcc`.
 
 ## To run
 See the `submit.sbatch` script.

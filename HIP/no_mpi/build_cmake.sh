@@ -12,7 +12,6 @@ rm -rf ./*
 
 module purge
 module load DefApps
-module load cmake/3.23.2
 
 if [[ ${CXX_COMPILER} == "CC" ]]; then
 module load PrgEnv-cray
@@ -26,6 +25,7 @@ module load rocm
 echo "building with hipcc"
 fi
 
+module load cmake/3.23.2
 cmake -DCMAKE_CXX_COMPILER=${CXX_COMPILER} -DAMDGPU_TARGETS="gfx90a" ..
 
 VERBOSE=1 make

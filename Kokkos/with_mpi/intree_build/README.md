@@ -19,9 +19,10 @@ If you're setting `CXX_COMPILER=CC` with `ENABLE_HIP=OFF`, you can use `PrgEnv-c
 `PrgEnv-gnu` interchangeably in the `./build_cmake.sh` file.
 
 If you're setting `CXX_COMPILER=hipcc`, there's some additional things that
-need to be considered in your `CMakeLists.txt`. `PrgEnv-amd` requires CMake
-compiler flags need to be explicitly set for MPI, whereas the others use CMake's `find`
-to auto find and add the appropriate libraries and flags.  See the `CMakeLists.txt` file for the
+need to be considered when writing your `CMakeLists.txt`. `PrgEnv-amd` and
+`PrgEnv-gnu` requires CMake compiler flags need to be explicitly set for MPI,
+whereas with `PrgEnv-cray` CMake's `find_package(MPI)` can auto find and add
+the appropriate libraries and flags.  See the `CMakeLists.txt` file for the
 different actions that are taken based on which `PrgEnv` is being used. 
 
 ## Building with Make
@@ -29,9 +30,9 @@ See the `Makefile` for an example of how to set up a Makefile for an in-tree bui
 Compile by running `./build_make.sh`. Open `build_make.sh` and edit the variables at the
 top for your desired compilation options.
 
-You can use `PrgEnv-cray`, `PrgEnv-amd`,
-`PrgEnv-gnu` interchangeably in the `./build_cmake.sh` file. No special considerations
-like in CMake since we're explicitly setting the required MPI flags for all programming
+You can use `PrgEnv-cray`, `PrgEnv-amd`, `PrgEnv-gnu` interchangeably in the
+`./build_make.sh` file for `hipcc`. No special considerations for MPI like in
+CMake since we're explicitly setting the required MPI flags for all programming
 environments.
 
 

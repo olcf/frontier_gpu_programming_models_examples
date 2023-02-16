@@ -20,7 +20,7 @@ module load rocm
 echo "building with CC"
 
 elif [[ ${CXX_COMPILER} == "hipcc" ]]; then
-module load PrgEnv-cray
+module load PrgEnv-gnu
 module load rocm
 echo "building with hipcc"
 fi

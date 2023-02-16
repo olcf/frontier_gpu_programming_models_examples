@@ -4,8 +4,8 @@
 #SBATCH -p batch
 #SBATCH -t 00:05:00
 #SBATCH -N 1
-#SBATCH --export=NONE
 
+module purge
 module load DefApps
 module load PrgEnv-cray
 module load rocm

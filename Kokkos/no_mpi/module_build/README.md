@@ -8,6 +8,8 @@ supports for your application build) by executing `module show kokkos`.
 ## Building with CMake
 See the `CMakeLists.txt` for an example of how to set up for a system module based build.
 Compile by running `./build_cmake.sh`. Open `build_cmake.sh` to see the build command. 
+You should be able to use `PrgEnv-cray`, `PrgEnv-amd`, `PrgEnv-gnu` interchangeably since
+it depends only on `hipcc`.
 
 
 ## To run
