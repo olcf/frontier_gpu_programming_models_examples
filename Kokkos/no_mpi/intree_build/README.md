@@ -22,6 +22,8 @@ See the `Makefile` for an example of how to set up a Makefile for an in-tree bui
 Compile by running `./build_make.sh`. Open `build_make.sh` and edit the variables at the
 top for your desired compilation options.
 
+You can use PrgEnv-cray, PrgEnv-amd, PrgEnv-gnu interchangeably in the ./build_cmake.sh file.
+
 ## To run
 See the `submit.sbatch` script.
 
