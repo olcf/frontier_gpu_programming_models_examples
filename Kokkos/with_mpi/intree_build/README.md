@@ -20,7 +20,7 @@ If you're setting `CXX_COMPILER=CC` with `ENABLE_HIP=OFF`, you can use `PrgEnv-c
 
 If you're setting `CXX_COMPILER=hipcc`, there's some additional things that
 need to be considered in your `CMakeLists.txt`. `PrgEnv-amd` requires CMake
-compiler flags need to be explicitly set, whereas the others use CMake's `find`
+compiler flags need to be explicitly set for MPI, whereas the others use CMake's `find`
 to auto find and add the appropriate libraries and flags.  See the `CMakeLists.txt` file for the
 different actions that are taken based on which `PrgEnv` is being used. 
 
