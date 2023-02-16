@@ -1,0 +1,11 @@
+# Resources for HIP
+- Basic tutorial if you have no CUDA knowledge (still a work in progress)
+  - https://github.com/olcf-tutorials/HIP_from_scratch
+- HIP Tutorial if you're already familiar with CUDA (this also covers how to use HIP with Fortran)
+  - olcf page: https://www.olcf.ornl.gov/calendar/hip-for-cuda-programmers/
+  - repo: https://github.com/olcf/HIP_for_CUDA_programmers 
+- hipfort (HIP bindings for fortran): https://github.com/ROCmSoftwarePlatform/hipfort
+- API Guide: https://docs.amd.com/category/HIP%20API%20Guides
+- hipify (tool to convert cuda code to hip): https://github.com/ROCm-Developer-Tools/HIPIFY
+- HIP-CUDA API support table https://github.com/ROCm-Developer-Tools/HIPIFY#cuda-apis
+- Cuda training series (most of the knowledge still applies for HIP): https://www.olcf.ornl.gov/cuda-training-series/
