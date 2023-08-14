@@ -11,58 +11,51 @@ rank among all the ranks.
 ## To build
 You can build HIP code with either the CC compiler wrapper or with hipcc. 
 
+NOTE: These are done on a new login session.
+
 For make, run `CXX_COMPILER=<value> ./build_make.sh` where `<value>` is either
 `CC` or `hipcc`. Look at the `build_make.sh`, `Makefile`, and `Makefile.hipcc` files to
 understand what's going on. Within the `build_make.sh`, we are setting the `PrgEnv-cray`
 for both `CC` and for `hipcc`, you can also use `PrgEnv-amd` for `CC` but not `PrgEnv-gnu`.
 You can use `PrgEnv-amd` and `PrgEnv-gnu` for hipcc.
  
-For cmake, run `CXX_COMPILER=<value> ./build_make.sh` where `<value>` is either
-`CC` or `hipcc`. Look at the `build_cmake.sh`, and `CMakeLists.txt` files to
-understand what's going on. Within the `build_cmake.sh`, we are setting the `PrgEnv-cray`
-for both `CC` and for `hipcc`, you can also use `PrgEnv-amd` for `CC` but not `PrgEnv-gnu`.
-You can use `PrgEnv-amd` and `PrgEnv-gnu` for hipcc.
+For cmake, run `./build_cmake.sh`. **CMake for HIP does not support changing compilers, it
+will use the clang compiler provided in the ROCm installation.**
+ Look at the `build_cmake.sh`, and `CMakeLists.txt` files to
+understand what's going on. 
 
 ## Notes on CMake for HIP
 
-CMake support for HIP is still a work in progress. There are cmake files in
-/opt/rocm-5.x.y that make those particular libraries available to CMake.  For
-example, you can look in `/opt/rocm-5.1.0/lib/cmake` which contain directories
-with the CMake config files. So in our example `CMakeLists.txt` we are doing a
-`find_package(hipblas)` and a `target_link_libraries(blah roc::hipblas)`. You
-can see that there are `hipblas-*.cmake` files in
-`/opt/rocm-5.1.0/lib/cmake/hipblas` and there is a `add_library(roc::hipblas
-SHARED IMPORTED)` in `hipblas-targets.cmake` which makes that hipblas library
-available as `roc::hipblas` for use in CMake when compiling your HIP files.
-This is similar for other hiplibraries like hipfft (`hip:hipfft`) and hiprand
-(`hip::hiprand`). So you might be doing a little scavenger hunting to figure
-out the directives to use for a particular hip library. 
+CMake now supports HIP and compiling .hip files by setting `project(MyProj LANGUAGES HIP)`.
+However, this supports only using the clang  provided in the ROCm library. Trying to set
+a different HIP compiler with `-DCMAKE_HIP_COMPILER=CC` will fail because the `hip-lang-config.cmake`
+tries searching for certain libraries relative to the compiler path and will fail for CC. So if 
+you're using Cmake, assume you're going to be using the default ROCm clang compiler for all HIP
+code.
 
-I would highly recommend watching Balint Joo's talk that covers more detail: 
-
+If you want to be able to use CC as your compiler for HIP with Cmake, you will need to set 
+`project(MyProj LANGUAGES CXX)`, use the .cpp extension for HIP files, and use the [legacy cmake
+steps](https://rocm.docs.amd.com/en/latest/understand/cmake_packages.html#compiling-device-code-in-c-language-mode)
 
 ## General information 
-For HIP, if you're compiling wit CC compiler wrapper with the Cray or AMD
+For HIP, if you're compiling wit CC compiler wrapper with the Cray 
 programming environment, make sure you load the following modules.
 
 ```
-module load PrgEnv-cray # or amd
+module load PrgEnv-cray 
 module load craype-accel-amd-gfx90a
-module load rocm
+module load amd-mixed
 ```
 
-If you're using hipcc, you only need
+For the AMD programming enviroment
+```
+module load PrgEnv-amd
+module load craype-accel-amd-gfx90a
+```
 
-```
-module load PrgEnv-Cray # or amd or gnu
-module load rocm
-```
+If you're using hipcc to compile, you don't need the `craype-accel-amd-gfx90a` module.
 
 You can find more info about the necessary compiler flags for HIP compilation
-[here](https://docs.olcf.ornl.gov/systems/frontier_user_guide.html#id6).
+[here](https://docs.olcf.ornl.gov/systems/frontier_user_guide.html#id9).
 
 
-# Note
-- Not setting `-DAMDGPU_TARGETS="gfx90a"` when running cmake (as you can see in `build_cmake.sh`
-means that CMake will use the default `AMDGPU_TARGETS="gfx900;gfx906;gfx908;gfx90a;gfx1030"`. 
-`gfx1030` is not supported by the Cray compiler.

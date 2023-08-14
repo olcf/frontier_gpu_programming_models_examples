@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <math.h>
+#include <mpi.h>
 #include <hip/hip_runtime.h>
 
 /* ---------------------------------------------------------------------------------
@@ -27,6 +28,24 @@ __global__ void add_vectors(double *a, double *b, double *c, int n){
 Main program
 ----------------------------------------------------------------------------------*/
 int main(int argc, char *argv[]){
+    MPI_Init(&argc, &argv);
+  
+    int size;
+    MPI_Comm_size(MPI_COMM_WORLD, &size);
+  
+    int rank;
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+  
+    char name[MPI_MAX_PROCESSOR_NAME];
+    int resultlength;
+    MPI_Get_processor_name(name, &resultlength);
+    
+    if(rank == 0) {
+      printf("number of ranks: %d\n", size);
+    }
+    // Start Total Runtime Timer
+    double start_time, end_time, elapsed_time;
+    start_time = MPI_Wtime();
 
     // Array length
     long long int N = 256*1024*1024;
@@ -63,8 +82,7 @@ int main(int argc, char *argv[]){
     int blk_in_grid = ceil( float(N) / thr_per_blk );
 
     hipErrorCheck( hipEventRecord(start, NULL) );
-
-    hipLaunchKernelGGL((add_vectors), dim3(blk_in_grid), dim3(thr_per_blk), 0, 0, d_A, d_B, d_C, N);
+    add_vectors<<<dim3(blk_in_grid), dim3(thr_per_blk), 0, hipStreamDefault>>>(d_A, d_B, d_C, N);
 
     hipErrorCheck( hipEventRecord(end, NULL) );
     hipErrorCheck( hipEventSynchronize(end) );
@@ -72,6 +90,9 @@ int main(int argc, char *argv[]){
     hipErrorCheck( hipEventElapsedTime(&milliseconds, start, end) ); 
 
     hipErrorCheck( hipMemcpy(C, d_C, buffer_size, hipMemcpyDeviceToHost) );
+
+    float max_gpu_time;
+    MPI_Reduce(&milliseconds, &max_gpu_time, 1, MPI_FLOAT, MPI_MAX, 0, MPI_COMM_WORLD);
 
     double sum = 0.0;
     for(int i=0; i<N; i++){
@@ -82,17 +103,10 @@ int main(int argc, char *argv[]){
     double relative_difference = fabs( (result - 1.0) / 1.0 );
 
     if(relative_difference > tolerance){
-        printf("Test failed!\n");
-    }
-    else{
-        printf("Test passed.\n");
+        printf("In rank %d: Test failed!\n", rank);
+        exit(1);
     }
 
-    printf("Result              = %.16f\n", result);
-    printf("Relative difference = %.16f\n", relative_difference);
-    printf("Tolerance           = %.16f\n", tolerance);
-    printf("Array buffer size   = %zu\n", buffer_size);
-    printf("Elapsed time (s)    = %.6f\n", milliseconds / 1000.0);
 
     hipErrorCheck( hipFree(d_A) );
     hipErrorCheck( hipFree(d_B) );
@@ -102,5 +116,19 @@ int main(int argc, char *argv[]){
     free(B);
     free(C);
 
+    end_time = MPI_Wtime();
+    elapsed_time = end_time - start_time;
+    double total_time_max;
+    MPI_Reduce(&elapsed_time, &total_time_max, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
+
+    if(rank == 0) {
+      printf("Result              = %.16f\n", result);
+      printf("Relative difference = %.16f\n", relative_difference);
+      printf("Tolerance           = %.16f\n", tolerance);
+      printf("Array buffer size   = %zu\n", buffer_size);
+      printf("Max GPU time (s)    = %.6f\n", max_gpu_time / 1000.0);
+      printf("Max MPI time (s)    = %.6f\n", total_time_max / 1000.0);
+    }
+    MPI_Finalize();
     return 0;
 }

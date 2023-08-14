@@ -7,8 +7,8 @@ LIBRARIES =
 vAdd_hip: vAdd_hip.o
 	${COMP} ${FLAGS} ${LIBRARIES} vAdd_hip.o -o vAdd_hip
 
-vAdd_hip.o: vAdd_hip.cpp
-	${COMP} ${FLAGS} ${INCLUDES} -c vAdd_hip.cpp
+vAdd_hip.o: vAdd_hip.hip
+	${COMP} ${FLAGS} ${INCLUDES} -c vAdd_hip.hip
 
 .PHONY: clean
 

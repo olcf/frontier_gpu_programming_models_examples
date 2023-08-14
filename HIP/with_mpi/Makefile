@@ -10,8 +10,8 @@ LIBRARIES = -L${ROCM_PATH}/lib -lamdhip64
 vAdd_hip: vAdd_hip.o
 	${COMP} ${LFLAGS} ${LIBRARIES} vAdd_hip.o -o vAdd_hip
 
-vAdd_hip.o: vAdd_hip.cpp
-	${COMP} ${CFLAGS} ${INCLUDES} -c vAdd_hip.cpp
+vAdd_hip.o: vAdd_hip.hip
+	${COMP} ${CFLAGS} ${INCLUDES} -c vAdd_hip.hip
 
 .PHONY: clean
 

@@ -2,14 +2,14 @@ COMP  = hipcc
 FLAGS = --amdgpu-target=gfx90a
 
 INCLUDES  =  -I${MPICH_DIR}/include   -I${OLCF_OPENBLAS_ROOT}/include
-LIBRARIES =  -L${MPICH_DIR}/lib -lmpi -L${OLCF_OPENBLAS_ROOT}/lib -lopenblas -L${ROCM_PATH}/lib -lhipblas
+LIBRARIES =  -L${MPICH_DIR}/lib -lmpi ${CRAY_XPMEM_POST_LINK_OPTS} -lxpmem ${PE_MPICH_GTL_DIR_amd_gfx90a} ${PE_MPICH_GTL_LIBS_amd_gfx90a} -L${OLCF_OPENBLAS_ROOT}/lib -lopenblas -L${ROCM_PATH}/lib -lhipblas
 
 
 cpu_gpu_dgemm: cpu_gpu_dgemm.o
 	${COMP} ${FLAGS} ${LIBRARIES} cpu_gpu_dgemm.o -o cpu_gpu_dgemm
 
-cpu_gpu_dgemm.o: cpu_gpu_dgemm.cpp
-	${COMP} ${FLAGS} ${INCLUDES} -c cpu_gpu_dgemm.cpp
+cpu_gpu_dgemm.o: cpu_gpu_dgemm.hip
+	${COMP} ${FLAGS} ${INCLUDES} -c cpu_gpu_dgemm.hip
 
 .PHONY: clean
 
