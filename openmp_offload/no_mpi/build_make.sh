@@ -10,7 +10,6 @@ fi
 
 echo "C_COMPILER: $C_COMPILER"
 
-export CRAY_CPU_TARGET=x86-64
 
 
 mkdir -p make_build_dir && cd make_build_dir
@@ -19,19 +18,29 @@ rm -rf ./*
 cp ../Makefile* ../jacobi.c .
 
 
-module purge
-module load DefApps
 
 if [[ ${C_COMPILER} == "cc" ]]; then
+# If using cray environment
 module load PrgEnv-cray
+module load amd-mixed
 module load craype-accel-amd-gfx90a
-module load rocm
+
+
+# If using amd environment
+#module load PrgEnv-amd
+#module load craype-accel-amd-gfx90a
+
 make -f Makefile
 
 
 elif [[ ${C_COMPILER} == "hipcc" ]]; then
-module load PrgEnv-cray
-module load rocm
+# If using cray environment
+#module load PrgEnv-cray
+#module load amd-mixed
+
+# If using amd environment
+module load PrgEnv-amd
+
 make -f Makefile.hipcc
 fi
 

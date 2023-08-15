@@ -9,24 +9,30 @@ fi
 
 echo "C_COMPILER: $C_COMPILER"
 
-export CRAY_CPU_TARGET=x86-64
 
 mkdir -p cmake_build_dir && cd cmake_build_dir 
 rm -rf ./*
 
 
-module purge
-module load DefApps
-
 if [[ ${C_COMPILER} == "cc" ]]; then
+# If using cray environment
 module load PrgEnv-cray
+module load amd-mixed
 module load craype-accel-amd-gfx90a
-module load rocm
+
+# If using amd environment
+#module load PrgEnv-amd
+#module load craype-accel-amd-gfx90a
 
 
 elif [[ ${C_COMPILER} == "hipcc" ]]; then
+# If using cray environment
 module load PrgEnv-cray
-module load rocm
+module load amd-mixed
+
+# If using amd environment
+#module load PrgEnv-amd
+
 fi
 
 

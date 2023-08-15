@@ -24,17 +24,18 @@ For OpenMP offload, if you're compiling wit cc compiler wrapper with the Cray or
 programming environment, make sure you load the following modules.
 
 ```
-module load PrgEnv-cray # or amd
+module load PrgEnv-cray 
 module load craype-accel-amd-gfx90a
-module load rocm
+module load amd-mixed
 ```
 
-If you're using hipcc directly, you only need
+For the AMD programming enviroment
+```
+module load PrgEnv-amd
+module load craype-accel-amd-gfx90a
+```
 
-```
-module load PrgEnv-Cray # or amd
-module load rocm
-```
+If you're using hipcc to compile, you don't need the `craype-accel-amd-gfx90a` module.
 
 See also the [OpenMP Offload compiler flag documentation for
 Frontier](https://docs.olcf.ornl.gov/systems/frontier_user_guide.html#openmp-gpu-offload).
@@ -53,10 +54,12 @@ And also see the OpenMP Offload tutorial series for more info about OpenMP Offlo
 - Clang based compilers (Cray, AMD) don't support loop directives yet.
 - When compiling with hipcc, you get "loop not vectorized" warnings from the
   LLVM optimizer by default. hipcc is a wrapper that adds a bunch of flags to
-  the compile line, including -O3.  If you use -O3 with the cc wrapper from
-  PrgEnv-amd, you'd get the same warnings (both hipcc and the cc wrapper call
-  into the same underlying LLVM compiler from amd). You can see the full hipcc
-  command by setting HIPCC_VERBOSE=7
+  the compile line, including -O3. You can see this if you pass `-v` to the hipcc
+  command.
+	-  If you use -O3 with the cc wrapper from PrgEnv-amd, you'd get the
+	   same warnings (both hipcc and the cc wrapper call into the same
+	   underlying LLVM compiler from amd). You can see the full hipcc command by
+           setting HIPCC_VERBOSE=7
   - cc from PrgEnv-cray gives similar (but not identical) warnings, since it
     uses a proprietary Cray optimizer in conjunction with upstream LLVM
     optimization passes.
