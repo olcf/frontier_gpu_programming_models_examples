@@ -1,5 +1,6 @@
-KOKKOS_PATH = ../../../kokkos-3.6.00
-KOKKOS_DEVICES = "OpenMP"
+KOKKOS_PATH = ../../../kokkos-4.1.00
+KOKKOS_DEVICES = "OpenMP,Serial" # replaced by passing options to make
+KOKKOS_ARCH = "ZEN3" # replaced by passing options to make
 EXE_NAME = "kokkos_example"
 
 SRC = $(wildcard *.cpp)
@@ -8,11 +9,9 @@ default: build
 	echo "Start Build"
 
 
-CXX = CC
+CXX = CC 
 EXE = ${EXE_NAME}
-KOKKOS_ARCH = "BDW"
 
-CXXFLAGS = -O3
 LINK = ${CXX}
 LINKFLAGS =
 
@@ -21,9 +20,10 @@ DEPFLAGS = -M
 OBJ = $(SRC:.cpp=.o)
 LIB =
 
+build: $(EXE)
+
 include $(KOKKOS_PATH)/Makefile.kokkos
 
-build: $(EXE)
 
 $(EXE): $(OBJ) $(KOKKOS_LINK_DEPENDS)
 	$(LINK) $(KOKKOS_LDFLAGS) $(LINKFLAGS) $(EXTRA_PATH) $(OBJ) $(KOKKOS_LIBS) $(LIB) -o $(EXE)

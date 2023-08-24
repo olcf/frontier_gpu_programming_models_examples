@@ -19,7 +19,9 @@ mkdir -p cmake_build_dir && cd cmake_build_dir
 rm -rf ./*
 
 module load ${PRGENV}
-module load rocm
+if [[ "$PRGENV" != PrgEnv-amd ]]; then
+module load amd-mixed 
+fi
 module load cmake
 cmake  \
     -DCMAKE_CXX_COMPILER=${CXX_COMPILER} \

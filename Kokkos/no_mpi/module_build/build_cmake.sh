@@ -10,9 +10,9 @@ export CRAYPE_LINK_TYPE=dynamic
 
 # Building with Kokkos module (this module is only configured with ENABLE_HIP so need to use hipcc)
 module load PrgEnv-cray
+module load amd-mixed
 module load cmake/3.23.2
-module load  kokkos/3.6.00
-module load rocm/5.1.0
+module load kokkos/3.6.00
 cmake -DCMAKE_CXX_COMPILER=hipcc  ..
 
 

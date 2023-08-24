@@ -4,7 +4,7 @@
 
 # Options you can adjust
 
-PRGENV="PrgEnv-cray" # can be: PrgEnv-cray | PrgEnv-gnu | PrgEnv-amd
+PRGENV="PrgEnv-amd" # can be: PrgEnv-cray | PrgEnv-gnu | PrgEnv-amd
 CXX_COMPILER="hipcc" # can be: hipcc | CC . hipcc for GPU backend. CC for CPU backend only.
 ENABLE_OPENMP=ON     # can be: ON | OFF
 ENABLE_HIP=ON      # can be: ON | OFF . Will not work with CXX_COMPILER=CC
@@ -19,7 +19,9 @@ mkdir -p cmake_build_dir && cd cmake_build_dir
 rm -rf ./*
 
 module load ${PRGENV}
-module load rocm
+if [[ "$PRGENV" != PrgEnv-amd ]]; then
+module load amd-mixed 
+fi
 module load cmake
 cmake  \
     -DCMAKE_CXX_COMPILER=${CXX_COMPILER} \

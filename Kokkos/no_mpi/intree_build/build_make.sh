@@ -6,7 +6,7 @@
 
 PRGENV="PrgEnv-cray" # can be: PrgEnv-cray | PrgEnv-gnu | PrgEnv-amd
 CXX_COMPILER="hipcc" # can be: hipcc | CC . hipcc for GPU backend. CC for CPU backend only.
-DEVICES="HIP,Serial" # can be: HIP,Serial | OpenMP,Serial . HIP,Serial for GPU backend. OpenMP,Serial for CPU backend.
+DEVICES="HIP,Serial" # can be: HIP,Serial | OpenMP,Serial . HIP,Serial for GPU backend; OpenMP,Serial for CPU backend.
 ARCH="ZEN3,VEGA90A"        
 
 
@@ -19,7 +19,11 @@ rm -rf ./*
 cp ../Makefile ../kokkos_example.cpp .
 
 module load ${PRGENV}
-module load rocm/5.1.0
+module load craype-accel-amd-gfx90a
+if [[ "$PRGENV" != PrgEnv-amd ]]; then
+  module load amd-mixed 
+fi
+
 make KOKKOS_DEVICES=${DEVICES} CXX=${CXX_COMPILER} KOKKOS_ARCH=${ARCH}
 
 echo

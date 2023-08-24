@@ -8,7 +8,8 @@
 
 module load DefApps
 module load PrgEnv-cray
-module load rocm/5.1.0
+module load amd-mixed
+module load kokkos/3.6.00
 
 export OMP_PROC_BIND=spread
 export OMP_PLACES=threads
