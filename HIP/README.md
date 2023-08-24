@@ -11,3 +11,4 @@
 - hipify (tool to convert cuda code to hip): https://github.com/ROCm-Developer-Tools/HIPIFY (is already available when you module load amd-mixed or module load amd)
 - HIP-CUDA API support table https://github.com/ROCm-Developer-Tools/HIPIFY#cuda-apis
 - Cuda training series (most of the knowledge still applies for HIP): https://www.olcf.ornl.gov/cuda-training-series/
+- CMake for ROCm documentation: https://rocm.docs.amd.com/en/latest/understand/cmake_packages.html
